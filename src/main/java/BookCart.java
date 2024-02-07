@@ -4,12 +4,12 @@ import org.testng.annotations.Test;
 public class BookCart {
     public static String baseURI = "https://bookcart.azurewebsites.net/api";
     public static String SecretKey="KqcL7s998JrfFHRP";
-    @Test
-    void add() {
+    @Test(dataProvider = "getexcel",dataProviderClass = Book.class)
+    void add(String bookid, String userid ) {
         JSONObject js=new JSONObject();
-        js.put("productid","1");
-        js.put("quantity","85");
-        ApiUtil.performPostRequest(baseURI, "/ShoppingCart/AddToCart/1/85", SecretKey,js)
+        js.put("userid",userid);
+        js.put("bookid",bookid);
+        ApiUtil.performPostRequest(baseURI, "/ShoppingCart/AddToCart/"+userid+"/"+bookid, SecretKey,js)
                 .then()
                 .statusCode(200)
                 .log().all();
@@ -17,7 +17,7 @@ public class BookCart {
 
     @Test
     void getCartItem() {
-        ApiUtil.performGetRequest(baseURI, "/ShoppingCart/1", SecretKey)
+        ApiUtil.performGetRequest(baseURI, "/ShoppingCart/2", SecretKey)
                 .then()
                 .statusCode(200)
                 .log().all();
